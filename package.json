@@ -2,26 +2,26 @@
   "name": "teesql-website",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for teesql.com — static export deployed to Cloudflare Pages.",
   "type": "module",
+  "description": "Marketing site for teesql.com — Astro + Svelte, deployed to Cloudflare Workers Assets.",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "next": "^16.2.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "@astrojs/svelte": "^8.0.5",
+    "@fontsource-variable/outfit": "^5.2.8",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/instrument-serif": "^5.2.8",
+    "@tailwindcss/vite": "^4.2.4",
+    "astro": "^6.1.9",
+    "svelte": "^5.55.5",
+    "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.2.2",
-    "@types/node": "^25.5.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "postcss": "^8.5.8",
-    "tailwindcss": "^4.2.2",
-    "typescript": "^6.0.2"
+    "@astrojs/check": "^0.9.8",
+    "typescript": "^5.9.3"
   }
 }

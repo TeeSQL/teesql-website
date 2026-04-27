@@ -1,0 +1,47 @@
+---
+// Fade-up-on-visible wrapper. Initial paint is hidden (opacity 0,
+// translated 20px down); on first IntersectionObserver hit (8%
+// threshold) we toggle data-visible="true" and CSS handles the rest.
+//
+// One global script per page does the observer wiring for every
+// [data-reveal] element. Cheaper than spinning up a hydration island
+// per Reveal instance, and the markup is pure HTML so it renders
+// correctly with JS disabled (just stays at opacity 1 / no transform
+// after the noscript fallback below).
+
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+---
+
+<div data-reveal class={`transition-all duration-500 opacity-0 translate-y-5 data-[visible=true]:opacity-100 data-[visible=true]:translate-y-0 ${className}`}>
+  <slot />
+</div>
+
+<script>
+  // Run once per page. Idempotent — re-importing the same module
+  // (e.g. via partial hydration) is a no-op because the IO is bound
+  // to the elements directly.
+  const reveal = (el: Element) => el.setAttribute("data-visible", "true");
+  const obs = new IntersectionObserver(
+    (entries, o) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          reveal(e.target);
+          o.unobserve(e.target);
+        }
+      }
+    },
+    { threshold: 0.08 },
+  );
+  for (const el of document.querySelectorAll("[data-reveal]")) {
+    obs.observe(el);
+  }
+</script>
+
+<noscript>
+  <style>
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+  </style>
+</noscript>

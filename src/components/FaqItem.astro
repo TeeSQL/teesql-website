@@ -1,0 +1,41 @@
+---
+// One Q+A row in the FAQ list. The question is always visible; the
+// answer collapses to max-h:0 and expands to max-h:400px on click.
+// State lives on a data-open attribute so we don't need a Svelte
+// island per row.
+
+interface Props {
+  q: string;
+}
+const { q } = Astro.props;
+---
+
+<div data-faq-item class="border-b border-rule py-5 cursor-pointer first:border-t">
+  <div class="font-sans text-base font-medium text-ink flex justify-between items-center">
+    {q}
+    <span class="font-mono text-lg text-ink-dim" data-faq-icon>+</span>
+  </div>
+  <div
+    data-faq-body
+    class="text-[0.92rem] text-ink-dim leading-[1.75] overflow-hidden transition-all duration-400 max-h-0"
+  >
+    <slot />
+  </div>
+</div>
+
+<script>
+  for (const el of document.querySelectorAll<HTMLElement>("[data-faq-item]")) {
+    el.addEventListener("click", () => {
+      const open = el.getAttribute("data-open") === "true";
+      const next = !open;
+      el.setAttribute("data-open", String(next));
+      const body = el.querySelector<HTMLElement>("[data-faq-body]");
+      const icon = el.querySelector<HTMLElement>("[data-faq-icon]");
+      if (body) {
+        body.style.maxHeight = next ? "400px" : "0";
+        body.style.paddingTop = next ? "0.75rem" : "0";
+      }
+      if (icon) icon.textContent = next ? "−" : "+";
+    });
+  }
+</script>

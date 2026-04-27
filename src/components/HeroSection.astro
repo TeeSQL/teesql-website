@@ -1,0 +1,39 @@
+---
+import HeroOriginal from "./HeroOriginal.svelte";
+import MCPInstall from "./MCPInstall.svelte";
+---
+
+<div class="relative min-h-screen flex flex-col justify-center pt-28 pb-20 overflow-hidden">
+  <HeroOriginal client:load />
+
+  <div class="relative max-w-[820px] mx-auto px-6 w-full text-center">
+    <div class="font-mono text-[0.7rem] text-mint tracking-[0.2em] uppercase mb-10 inline-flex items-center gap-2.5 max-md:flex-col max-md:gap-1.5 opacity-0 animate-[fadeUp_0.5s_ease_0.1s_forwards]">
+      <span class="inline-flex items-center gap-2.5">
+        <span class="w-[7px] h-[7px] bg-mint rounded-full animate-[pulse_2s_ease-in-out_infinite]"></span>
+        Early access
+      </span>
+      <span class="text-rule max-md:hidden">|</span>
+      <span class="text-ink-dim tracking-[0.16em]">Confidential PostgreSQL</span>
+    </div>
+
+    <div class="font-serif font-normal leading-[0.92] tracking-[-0.025em] text-[clamp(5rem,15vw,10rem)] text-ink mb-8 opacity-0 animate-[fadeUp_0.6s_ease_0.2s_forwards]">
+      Tee<span class="text-mint">SQL</span>
+    </div>
+
+    <h1 class="font-sans text-[clamp(1.6rem,3.6vw,2.4rem)] font-medium text-ink-strong mb-12 tracking-[-0.03em] opacity-0 animate-[fadeUp_0.5s_ease_0.35s_forwards]">
+      Don&apos;t trust. <span class="text-mint">Verify.</span>
+    </h1>
+
+    <a
+      href="#trust"
+      class="inline-flex items-center gap-2 mb-10 font-mono text-[0.7rem] tracking-[0.14em] uppercase text-ink-dim hover:text-mint no-underline transition-colors opacity-0 animate-[fadeUp_0.5s_ease_0.5s_forwards]"
+    >
+      Verify it yourself
+      <span aria-hidden="true" class="text-[0.85rem]">↓</span>
+    </a>
+
+    <div class="max-w-[560px] mx-auto opacity-0 animate-[fadeUp_0.5s_ease_0.65s_forwards]">
+      <MCPInstall client:load />
+    </div>
+  </div>
+</div>

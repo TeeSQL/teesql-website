@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BackgroundDecorations from "../components/BackgroundDecorations.astro";
+import NavBar from "../components/NavBar.svelte";
+import HeroSection from "../components/HeroSection.astro";
+import TrustDemoSection from "../components/TrustDemoSection.astro";
+import TrustQuoteSection from "../components/TrustQuoteSection.astro";
+import HowItWorksSection from "../components/HowItWorksSection.astro";
+import ComparisonSection from "../components/ComparisonSection.astro";
+import WhatYouGetSection from "../components/WhatYouGetSection.astro";
+import EarlyAccessSection from "../components/EarlyAccessSection.astro";
+import FaqSection from "../components/FaqSection.astro";
+import FinalCtaSection from "../components/FinalCtaSection.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+---
+
+<BaseLayout>
+  <div class="relative min-h-screen bg-page text-ink-body font-sans leading-[1.7] overflow-x-clip w-full max-w-[100vw]">
+    <BackgroundDecorations />
+    <NavBar client:load />
+    <HeroSection />
+    <TrustDemoSection />
+    <TrustQuoteSection />
+    <HowItWorksSection />
+    <ComparisonSection />
+    <WhatYouGetSection />
+    <EarlyAccessSection />
+    <FaqSection />
+    <FinalCtaSection />
+    <SiteFooter />
+  </div>
+</BaseLayout>

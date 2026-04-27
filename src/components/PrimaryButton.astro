@@ -1,0 +1,32 @@
+---
+type Size = "sm" | "md";
+
+interface Props {
+  size?: Size;
+  class?: string;
+  /** Pass either an href (renders an <a>) or omit (renders a <button>). */
+  href?: string;
+  type?: "button" | "submit" | "reset";
+  /** Forwarded to the underlying element. */
+  id?: string;
+}
+
+const SIZE_CLASSES: Record<Size, string> = {
+  sm: "px-3 py-1.5 text-[0.74rem]",
+  md: "px-6 py-3 text-[0.82rem]",
+};
+
+const { size = "md", class: className = "", href, type, id, ...rest } = Astro.props;
+
+const cls = `font-mono font-semibold rounded-md bg-mint text-page hover:bg-mint-hi transition-all hover:-translate-y-px cursor-pointer inline-flex items-center justify-center ${SIZE_CLASSES[size]} ${className}`;
+---
+
+{href ? (
+  <a href={href} class={cls} id={id} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button type={type ?? "button"} class={cls} id={id} {...rest}>
+    <slot />
+  </button>
+)}

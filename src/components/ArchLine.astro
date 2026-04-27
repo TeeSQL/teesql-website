@@ -1,0 +1,30 @@
+---
+// Animated line that fills left-to-right when scrolled into view —
+// used inside ArchDiagram between "Your App" and "TEESQL" boxes.
+// Same vanilla-JS-with-IO pattern as Reveal.
+---
+
+<div data-arch-line class="w-full h-[2px] bg-rule relative overflow-visible">
+  <div class="h-full bg-mint shadow-[0_0_8px_rgba(52,211,153,0.15)] transition-all duration-[1500ms] ease-out w-0 data-[fill=true]:w-full" data-arch-line-fill>
+  </div>
+  <div class="absolute -right-px -top-1 border-[5px] border-transparent border-l-[6px] border-l-mint">
+  </div>
+</div>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries, o) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          const fill = e.target.querySelector<HTMLElement>("[data-arch-line-fill]");
+          if (fill) fill.setAttribute("data-fill", "true");
+          o.unobserve(e.target);
+        }
+      }
+    },
+    { threshold: 0.3 },
+  );
+  for (const el of document.querySelectorAll("[data-arch-line]")) {
+    obs.observe(el);
+  }
+</script>

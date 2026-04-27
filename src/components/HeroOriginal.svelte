@@ -1,13 +1,24 @@
-"use client";
+<!--
+  Hero canvas: a Lissajous-like figure drawn from a polar grid of N
+  points. `k` (the connection multiplier) breathes in/out via a sine
+  wave, which makes the line bunch and unbunch over time; near integer
+  values of k the rendering "snaps" into a recognizable rose curve,
+  which we lean into with a brighter overlay (the `sharpness > 0.6`
+  branch). Top of the canvas fades out so the hero text sits cleanly
+  above it.
 
-import { useEffect, useRef } from "react";
+  This is straight DOM + canvas drawing inside requestAnimationFrame
+  — no Svelte store needed, just a ref and a cleanup. Hydration-time
+  cost is essentially zero; the heavy work runs only once the canvas
+  is on screen and the rAF loop is tied to display refresh.
+-->
 
-export default function HeroOriginal() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+<script lang="ts">
+  import { onMount } from "svelte";
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  let canvas: HTMLCanvasElement;
+
+  onMount(() => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -97,6 +108,8 @@ export default function HeroOriginal() {
         ctx.stroke();
       }
 
+      // Carve out the top so the nav + hero text sit on a clean
+      // background instead of overlapping the curve.
       const navInset = 64;
       const fadeBand = 24;
       ctx.globalCompositeOperation = "destination-out";
@@ -114,13 +127,11 @@ export default function HeroOriginal() {
 
     raf = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  });
+</script>
 
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden
-      className="absolute inset-0 w-full h-full pointer-events-none"
-    />
-  );
-}
+<canvas
+  bind:this={canvas}
+  aria-hidden="true"
+  class="absolute inset-0 w-full h-full pointer-events-none"
+></canvas>

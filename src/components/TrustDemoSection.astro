@@ -1,0 +1,22 @@
+---
+import Reveal from "./Reveal.astro";
+import SectionEyebrow from "./SectionEyebrow.astro";
+import Terminal from "./Terminal.svelte";
+---
+
+<section id="trust" class="scroll-mt-20"></section>
+<Reveal class="py-20">
+  <div class="max-w-[820px] mx-auto px-6">
+    <div class="flex items-baseline justify-between mb-5 max-md:flex-col max-md:items-start max-md:gap-1">
+      <SectionEyebrow>
+        Trust, demonstrated
+        <span class="text-rule">/</span>
+        <span class="text-ink-dim">live attestation</span>
+      </SectionEyebrow>
+      <div class="font-mono text-[0.66rem] text-ink-dim">
+        $ teesql attest --verify
+      </div>
+    </div>
+    <Terminal client:visible />
+  </div>
+</Reveal>

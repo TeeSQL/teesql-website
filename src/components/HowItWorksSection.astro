@@ -1,0 +1,93 @@
+---
+import ArchDiagram from "./ArchDiagram.astro";
+import Reveal from "./Reveal.astro";
+import SectionEyebrow from "./SectionEyebrow.astro";
+
+// "How it works" — five layers (TDX, dstack, KMS, sidecar, mutual
+// RA-TLS) each rendered as a numbered row. The dstack row mixes
+// inline links (Phala / Linux Foundation / dstack repo / zkSecurity)
+// inline with prose, so its `desc` field is HTML; the others are
+// plain text.
+
+type Layer = { num: string; title: string; tag: string; desc: string };
+
+const LAYERS: Layer[] = [
+  {
+    num: "01",
+    title: "Intel TDX",
+    tag: "hardware",
+    desc:
+      "The foundation. Intel Trust Domain Extensions create a Confidential Virtual Machine where memory is encrypted by the CPU itself. Nothing outside the VM — not the hypervisor, not the host OS, not the cloud provider — can read what’s inside.",
+  },
+  {
+    num: "02",
+    title: "dstack",
+    tag: "orchestration",
+    desc:
+      `The open-source confidential computing framework built by ` +
+      `<a href="https://phala.network" target="_blank" rel="noopener noreferrer" class="text-ink-strong underline decoration-rule underline-offset-4 hover:decoration-mint hover:text-mint transition-colors">Phala</a>` +
+      `, now a ` +
+      `<a href="https://www.linuxfoundation.org" target="_blank" rel="noopener noreferrer" class="text-ink-strong underline decoration-rule underline-offset-4 hover:decoration-mint hover:text-mint transition-colors">Linux Foundation</a>` +
+      ` project. ` +
+      `<a href="https://github.com/Dstack-TEE/dstack" target="_blank" rel="noopener noreferrer" class="text-ink-strong underline decoration-rule underline-offset-4 hover:decoration-mint hover:text-mint transition-colors">dstack</a>` +
+      ` handles CVM lifecycle, remote attestation, and key management. Independently audited by ` +
+      `<a href="https://www.zksecurity.xyz" target="_blank" rel="noopener noreferrer" class="text-ink-strong underline decoration-rule underline-offset-4 hover:decoration-mint hover:text-mint transition-colors">zkSecurity</a>.`,
+  },
+  {
+    num: "03",
+    title: "KMS",
+    tag: "key management",
+    desc:
+      "Encryption keys are derived inside a dedicated TEE instance. Keys are bound to your application’s attested identity — they never exist in plaintext outside enclave memory, and no human ever holds them.",
+  },
+  {
+    num: "04",
+    title: "Sidecar",
+    tag: "access control",
+    desc:
+      "Runs inside the CVM alongside PostgreSQL. Handles RA-TLS termination, attestation verification, connection authorization, metrics, and encrypted backup export. Postgres never faces the network directly.",
+  },
+  {
+    num: "05",
+    title: "Mutual RA-TLS",
+    tag: "connection protocol",
+    desc:
+      "Every connection is a mutual Remote Attestation TLS handshake. Your app proves it’s running in a TEE. The database proves the same back. Three RTMR measurements are verified before any SQL flows.",
+  },
+];
+---
+
+<Reveal>
+  <section id="how" class="py-20">
+    <div class="max-w-[860px] mx-auto px-6">
+      <SectionEyebrow class="mb-3">How it works</SectionEyebrow>
+      <h2 class="font-sans text-[clamp(1.6rem,3.4vw,2.2rem)] font-semibold text-ink mb-3 tracking-[-0.03em]">
+        Five components. One trust boundary.
+      </h2>
+      <p class="text-base text-ink-body max-w-[540px] mb-12 leading-[1.75]">
+        TEESQL is a stack of open-source and hardware-enforced layers. Each one does one job.
+      </p>
+
+      <div class="flex flex-col">
+        {LAYERS.map((layer) => (
+          <div class="flex gap-6 py-7 border-b border-rule last:border-b-0 group">
+            <div class="font-mono text-[0.78rem] text-mint font-semibold pt-0.5 shrink-0 w-10 tracking-[0.05em]">
+              {layer.num}
+            </div>
+            <div>
+              <h3 class="font-sans text-[1.1rem] font-semibold text-ink mb-2 tracking-[-0.01em]">
+                {layer.title}{" "}
+                <span class="font-mono text-[0.64rem] text-ink-dim font-normal tracking-[0.08em] uppercase bg-page border border-rule rounded px-2 py-0.5 ml-2 align-middle">
+                  {layer.tag}
+                </span>
+              </h3>
+              <p class="text-[0.95rem] text-ink-body leading-[1.75]" set:html={layer.desc}></p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <ArchDiagram />
+    </div>
+  </section>
+</Reveal>

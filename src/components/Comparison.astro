@@ -1,0 +1,74 @@
+---
+// Side-by-side "every other Postgres" vs "TEESQL" cards. The TEESQL
+// side has two visual reveals on scroll: a soft mint glow fades in,
+// and the literal "NONE" word fades in (with a delay) inside the
+// GRANT statement to land the joke. Both gated on IntersectionObserver
+// at 45% visibility.
+---
+
+<div data-comparison class="grid grid-cols-2 max-md:grid-cols-1 gap-5">
+  <div class="p-7 rounded-lg bg-surface-raised border border-rule">
+    <div class="font-mono text-[0.66rem] tracking-[0.14em] uppercase text-ink-dim mb-4">
+      Every other managed Postgres
+    </div>
+    <div class="font-mono text-[0.95rem] bg-page px-3 py-2.5 rounded inline-block mb-5 border border-rule">
+      <span class="text-ink-body">GRANT </span>
+      <span class="text-danger font-semibold">ALL</span>
+      <span class="text-ink-body"> TO operator;</span>
+    </div>
+    <p class="text-[0.95rem] leading-[1.65] text-ink-dim">
+      The operator holds your data in the clear.
+      <br />
+      Security model: &ldquo;trust us.&rdquo;
+    </p>
+  </div>
+
+  <div class="p-7 rounded-lg bg-mint/[0.06] border border-mint/[0.22] relative overflow-hidden">
+    <div
+      data-comparison-glow
+      class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-mint blur-[80px] transition-opacity duration-1000 opacity-0 data-[shown=true]:opacity-[0.08]"
+    ></div>
+    <div class="font-mono text-[0.66rem] tracking-[0.14em] uppercase text-mint mb-4 relative">
+      TEESQL
+    </div>
+    <div class="font-mono text-[0.95rem] bg-mint/[0.05] px-3 py-2.5 rounded inline-block mb-5 border border-mint/[0.18] relative">
+      <span class="text-ink-strong">GRANT </span>
+      <span class="inline-block min-w-[3.2ch]">
+        <span
+          data-comparison-none
+          class="transition-all duration-700 delay-500 opacity-0 data-[shown=true]:opacity-100 data-[shown=true]:text-mint"
+        >
+          NONE
+        </span>
+      </span>
+      <span class="text-ink-strong"> TO operator;</span>
+    </div>
+    <p class="text-[0.95rem] leading-[1.65] text-ink-strong relative">
+      The operator is cryptographically blind.
+      <br />
+      Enforced by silicon, not policy.
+    </p>
+  </div>
+</div>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries, o) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          const root = e.target as HTMLElement;
+          for (const child of root.querySelectorAll<HTMLElement>(
+            "[data-comparison-glow], [data-comparison-none]",
+          )) {
+            child.setAttribute("data-shown", "true");
+          }
+          o.unobserve(root);
+        }
+      }
+    },
+    { threshold: 0.45 },
+  );
+  for (const el of document.querySelectorAll("[data-comparison]")) {
+    obs.observe(el);
+  }
+</script>

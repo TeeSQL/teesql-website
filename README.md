@@ -8,11 +8,14 @@ alongside this in a monolithic Next.js app — those have moved to the
 monitoring hub. This repo is **landing page only** and intentionally
 stays free of any server-side runtime.
 
+**Stack**: Astro 6 + Svelte 5 (islands) + Tailwind v4. Build output is
+plain HTML/CSS/JS in `./out`; no SSR, no Worker script.
+
 ## Develop
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+npm run dev      # http://localhost:4321
 ```
 
 ## Build
@@ -21,9 +24,10 @@ npm run dev      # http://localhost:3000
 npm run build    # writes static site to ./out
 ```
 
-`next.config.ts` sets `output: "export"`, so `next build` produces a
-fully static site under `out/`. Any static host can serve it; we
-deploy via Cloudflare's Workers Builds + Workers Assets.
+`astro.config.mjs` sets `output: "static"` and `outDir: "./out"`, so
+`astro build` produces a fully static site under `out/`. Any static
+host can serve it; we deploy via Cloudflare's Workers Builds + Workers
+Assets.
 
 ## Deploy
 

@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* Self-hosted via @fontsource so we don't depend on Google's CDN at
+ * runtime. Outfit ships as a variable font (full 100–900 axis);
+ * Instrument Serif and IBM Plex Mono ship as discrete weight files
+ * — pull only the weights/styles the design actually uses. */
+@import "@fontsource-variable/outfit";
+
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/400-italic.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/500-italic.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+@import "@fontsource/ibm-plex-mono/600-italic.css";
+@import "@fontsource/ibm-plex-mono/700.css";
+@import "@fontsource/ibm-plex-mono/700-italic.css";
+
+/* Map @fontsource family names to the same CSS variables the old
+ * Next.js setup exposed (next/font/google produced --font-outfit etc).
+ * Keeping the variable names identical means the @theme block below
+ * doesn't have to change. */
+:root {
+  --font-outfit: "Outfit Variable";
+  --font-instrument-serif: "Instrument Serif";
+  --font-ibm-plex-mono: "IBM Plex Mono";
+}
+
+@theme {
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", monospace;
+
+  --color-mint: #34d399;
+  --color-mint-hi: #4eeeb5;
+
+  --color-page: #0b0d0f;
+  --color-surface-deep: #0a0c10;
+  --color-surface: #0d1014;
+  --color-surface-soft: #0f1218;
+  --color-surface-raised: #11141a;
+  --color-surface-bar: #12151b;
+
+  --color-rule: #1e2430;
+
+  --color-ink: #f0f2f5;
+  --color-ink-strong: #e8ecf1;
+  --color-ink-body: #c8cdd5;
+  --color-ink-mute: #7a8190;
+  --color-ink-dim: #555e6e;
+  --color-ink-faint: #3a4150;
+
+  --color-danger: #f87171;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }

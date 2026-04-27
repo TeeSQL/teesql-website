@@ -1,0 +1,27 @@
+---
+import "../styles/globals.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "TEESQL — TEE-Hosted PostgreSQL",
+  description = "Fully managed Postgres inside Trusted Execution Environments. Hardware-attested, encrypted, zero human access.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/dstack-logo.svg" />
+  </head>
+  <body class="min-h-screen bg-page text-ink-body antialiased">
+    <slot />
+  </body>
+</html>
