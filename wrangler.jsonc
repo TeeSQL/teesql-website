@@ -1,0 +1,34 @@
+{
+  // Cloudflare Workers project config — static-assets-only.
+  //
+  // No `main` field = there is no Worker script; CF serves the
+  // contents of `assets.directory` directly. This is the post-Pages
+  // shape (Pages got merged into "Workers Builds" in early 2026); the
+  // assets-only Worker is the static-site successor.
+  //
+  // Why this file is committed: without it, `wrangler deploy` runs
+  // framework auto-detection on every CI run, sees `next` in
+  // package.json, runs `opennextjs-cloudflare migrate` to convert this
+  // into an SSR Worker, and crashes building from `.next/standalone/`
+  // — which doesn't exist because `next.config.ts` has
+  // `output: "export"`. With this file present, wrangler skips
+  // auto-config and uses what's here.
+  //
+  // To run a deploy: `npx wrangler deploy` after `npm run build`.
+  // CF's Workers Builds project settings should reflect:
+  //   build command:  npm run build
+  //   deploy command: npx wrangler deploy
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "teesql-website",
+  "compatibility_date": "2026-04-27",
+  "assets": {
+    // `out/` is what `next build` writes when output: "export". Each
+    // route lands as a static .html file plus the _next/ chunk dir.
+    "directory": "./out",
+    // 404-page = serve out/404.html for unknown paths (Next.js
+    // generates this from the (404) segment / not-found.tsx).
+    // single-page-application would re-serve out/index.html instead;
+    // wrong for a multi-route static site.
+    "not_found_handling": "404-page"
+  }
+}

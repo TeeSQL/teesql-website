@@ -1,7 +1,7 @@
 # teesql-website
 
 Marketing/landing site for [teesql.com](https://teesql.com). Static
-export, deployed to Cloudflare Pages on every push to `main`.
+export, deployed to Cloudflare Workers Assets on every push to `main`.
 
 The customer dashboard, auth, billing, and `/api/*` previously lived
 alongside this in a monolithic Next.js app — those have moved to the
@@ -23,59 +23,38 @@ npm run build    # writes static site to ./out
 
 `next.config.ts` sets `output: "export"`, so `next build` produces a
 fully static site under `out/`. Any static host can serve it; we
-deploy to Cloudflare Pages.
+deploy via Cloudflare's Workers Builds + Workers Assets.
 
 ## Deploy
 
-There are two supported paths. The repo currently ships with both
-options ready; pick one and disable the other.
+Cloudflare's "Connect to Git" project watches `main` and runs the
+build itself on every push. There are no GitHub Actions secrets; the
+deploy is wired through `wrangler.jsonc` in this repo.
 
-### Path A — Cloudflare Pages "Connect to Git" (no Actions, no secrets)
+One-time CF project setup (already done — listed here for context):
 
-The simplest setup. Cloudflare watches the GitHub repo directly and
-runs the build itself on every push.
+1. CF dashboard → top-bar search for **"Workers"** → Create →
+   Connect to Git → pick `TeeSQL/teesql-website`.
+2. Build settings:
+   - Build command: `npm run build`
+   - Deploy command: `npx wrangler deploy` (default)
+   - Output dir is read from `wrangler.jsonc` (`./out`); leave the
+     project's "Output directory" field blank.
+3. Add `teesql.com` and `www.teesql.com` under "Custom domains" once
+   the first deploy lands.
 
-1. In the Cloudflare dashboard, search for **"Pages"** in the top-bar
-   search (the sidebar labels rearrange — "Compute (Workers)" / "Pages"
-   are separate sections in the current layout, but the search lands
-   you on the right place every time).
-2. Create a Pages project → "Connect to Git" → pick `TeeSQL/teesql-website`.
-3. Build settings:
-   - **Framework preset**: Next.js (Static HTML Export) — *not* the
-     default Next.js preset, which expects a server runtime.
-   - **Build command**: `npm run build`
-   - **Build output directory**: `out`
-   - **Root directory**: (leave blank)
-4. Add `teesql.com` and `www.teesql.com` under the project's
-   "Custom domains" tab — Cloudflare auto-creates the CNAMEs in the
-   teesql.com zone.
+`wrangler.jsonc` declares the Worker as assets-only (no `main`
+script — CF serves the contents of `out/` directly with
+`not_found_handling: 404-page`). This keeps wrangler from running its
+Next.js auto-detection, which otherwise tries to convert this into an
+SSR Worker via OpenNext and crashes against `output: "export"`.
 
-If you go this route, delete `.github/workflows/deploy.yml` so two
-deploy paths don't race each other.
-
-### Path B — GitHub Actions + `wrangler pages deploy`
-
-What the included `.github/workflows/deploy.yml` does today:
-
-1. `npm ci` + `npm run build`
-2. `cloudflare/wrangler-action@v3` runs `wrangler pages deploy out --project-name teesql-website --branch main`
-
-Required GitHub repository secrets:
-
-| Secret | Where to get it |
-|---|---|
-| `CLOUDFLARE_API_TOKEN` | Dashboard → top-right profile menu → "API Tokens" → Create Token → Custom token. Permissions: `Account → Cloudflare Pages → Edit`. |
-| `CLOUDFLARE_ACCOUNT_ID` | Dashboard → top-right profile menu → "Account ID" (or visible in any Pages/Workers URL: `dash.cloudflare.com/<account-id>/...`). |
-
-The Pages project must exist before the first run. Easiest one-shot:
+To deploy from a laptop:
 
 ```bash
-CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=<id> \
-  npx wrangler pages project create teesql-website --production-branch main
+npm run build
+npx wrangler deploy           # uses wrangler.jsonc
 ```
-
-Then attach `teesql.com` / `www.teesql.com` as custom domains in the
-Pages project settings (same UI as Path A step 4).
 
 ## Hard rules
 
