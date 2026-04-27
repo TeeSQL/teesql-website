@@ -1,0 +1,72 @@
+import FaqItem from "./faq-item";
+import Reveal from "./reveal";
+import SectionEyebrow from "./section-eyebrow";
+
+const FAQS: { q: string; a: React.ReactNode }[] = [
+  {
+    q: "What is dstack and why should I trust it?",
+    a: "dstack is an open-source confidential computing framework built by Phala, now stewarded by the Linux Foundation. It handles CVM orchestration, key management, and attestation for TEE workloads. The entire codebase was independently audited by zkSecurity in 2025.",
+  },
+  {
+    q: 'What does "dev-proof" actually mean?',
+    a: (
+      <>
+        The developer is treated as a potential attacker. The CVM runs only PostgreSQL and a minimal locked-down kernel &mdash; no shell, no root access, no SSH. The sidecar controls all access. Even the TEESQL team cannot reach the data in decrypted form.
+      </>
+    ),
+  },
+  {
+    q: "What if Intel TDX has a vulnerability?",
+    a: "TEEs are not a silver bullet. Our security model layers hardware attestation with KMS-derived encryption and RTMR-based application verification. For protecting data from operators, cloud providers, and software-level attackers, TDX is the strongest commercially available option.",
+  },
+  {
+    q: "Is this actually standard Postgres?",
+    a: "Yes. PostgreSQL 17 running unmodified inside the CVM. Same wire protocol, same drivers, same extensions. If it works with Postgres, it works with TEESQL.",
+  },
+  {
+    q: "Does my app need to run in a TEE?",
+    a: (
+      <>
+        For full mutual RA-TLS &mdash; yes. Both sides prove TEE identity before any SQL is exchanged. If your app already runs on dstack or any Intel TDX environment, connecting requires no code changes beyond using the RA-TLS client certificate.
+      </>
+    ),
+  },
+  {
+    q: "What's the performance overhead?",
+    a: (
+      <>
+        Intel TDX adds roughly 2&ndash;5% overhead for CPU-bound workloads. Memory encryption is hardware-accelerated. The RA-TLS handshake adds a one-time cost at connection establishment.
+      </>
+    ),
+  },
+  {
+    q: "Is the sidecar and tooling open source?",
+    a: "Yes. TEESQL is built on open-source components. You can audit the code that runs inside the TEE. Reproducible builds mean you can verify the binary matches the source.",
+  },
+  {
+    q: "Where can I deploy TEESQL?",
+    a: "Currently: Phala Cloud, Secret Network, iExec, and bare-metal Intel TDX servers. On the roadmap: GCP Confidential VMs, Azure Confidential Computing, and AWS Nitro.",
+  },
+];
+
+export default function FAQSection() {
+  return (
+    <Reveal>
+      <section id="docs" className="py-20">
+        <div className="max-w-[780px] mx-auto px-6">
+          <SectionEyebrow className="mb-3">Go deeper</SectionEyebrow>
+          <h2 className="font-sans text-[clamp(1.6rem,3.4vw,2.2rem)] font-semibold text-ink mb-3 tracking-[-0.03em]">
+            Questions you should ask.
+          </h2>
+          <div className="mt-8">
+            {FAQS.map(({ q, a }) => (
+              <FaqItem key={q} q={q}>
+                {a}
+              </FaqItem>
+            ))}
+          </div>
+        </div>
+      </section>
+    </Reveal>
+  );
+}

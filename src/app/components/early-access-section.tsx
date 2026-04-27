@@ -1,0 +1,80 @@
+"use client";
+
+import { RefObject } from "react";
+import PulseEyebrow from "./pulse-eyebrow";
+import Reveal from "./reveal";
+import WaitlistForm from "./waitlist-form";
+
+const PERKS = [
+  "Free trial when we open the doors",
+  "Direct line to the team building it",
+  "Help shape the product before v1",
+];
+
+export default function EarlyAccessSection({
+  inputRef,
+}: {
+  inputRef: RefObject<HTMLInputElement | null>;
+}) {
+  return (
+    <Reveal>
+      <section id="early-access" className="py-24 scroll-mt-20">
+        <div className="max-w-[1000px] mx-auto px-6">
+          <div className="relative rounded-[14px] border border-rule bg-gradient-to-br from-surface-raised to-surface p-10 max-md:p-7 overflow-hidden">
+            <div className="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-mint blur-[110px] opacity-[0.06]" />
+            <div className="absolute -bottom-32 -right-32 w-[420px] h-[420px] rounded-full bg-mint blur-[110px] opacity-[0.04]" />
+
+            <div className="grid grid-cols-2 max-md:grid-cols-1 gap-12 max-md:gap-8 relative">
+              <div>
+                <PulseEyebrow className="mb-4">Now in early access</PulseEyebrow>
+                <h2 className="font-sans text-[clamp(1.7rem,3.6vw,2.4rem)] font-semibold text-ink mb-5 tracking-[-0.035em] leading-[1.1]">
+                  Run Postgres.
+                  <br />
+                  Verify the runtime.
+                </h2>
+                <p className="text-[0.98rem] text-ink-body leading-[1.75] mb-6 max-w-[420px]">
+                  We&apos;re onboarding a small set of teams building inside TEEs. Pricing comes later. Right now, the goal is to put TEESQL in front of developers who actually need it &mdash; and listen.
+                </p>
+                <ul className="space-y-2.5 font-mono text-[0.82rem] text-ink-body">
+                  {PERKS.map((t) => (
+                    <li key={t} className="flex items-center gap-2.5">
+                      <span
+                        aria-hidden
+                        className="shrink-0 w-0 h-0 border-y-[4px] border-y-transparent border-l-[6px] border-l-mint"
+                      />
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex flex-col justify-center">
+                <div className="rounded-lg border border-rule bg-page/60 backdrop-blur-sm p-7 max-md:p-5">
+                  <div className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-mint mb-2">
+                    Record your interest
+                  </div>
+                  <p className="font-sans text-[0.95rem] text-ink-strong mb-5 leading-[1.55]">
+                    Drop your email. We&apos;ll reach out as slots open.
+                  </p>
+                  <WaitlistForm className="flex-col" inputRef={inputRef} />
+                  <p className="font-mono text-[0.66rem] text-ink-dim mt-3 leading-[1.6]">
+                    No spam, no marketing list. Just access details.
+                  </p>
+                </div>
+                <div className="font-mono text-[0.66rem] text-ink-dim mt-4 text-center leading-[1.7]">
+                  Building on dstack already?{" "}
+                  <a
+                    href="mailto:hello@teesql.com"
+                    className="text-ink-body hover:text-mint transition-colors underline underline-offset-[3px] decoration-rule"
+                  >
+                    Tell us &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Reveal>
+  );
+}
