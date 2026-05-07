@@ -51,7 +51,7 @@ These are non-negotiable when working in this repo:
 | `src/layouts/BaseLayout.astro` | Root layout — `<html>`, metadata, body class, imports `globals.css`. |
 | `src/styles/globals.css` | Tailwind v4 + design tokens (colors, fonts, keyframes) + `@fontsource` imports. |
 | `src/components/*.astro` | Static + lightly-interactive components (Reveal, FaqItem, etc — vanilla JS via `<script>` tag). |
-| `src/components/*.svelte` | The 5 hydration islands: NavBar, HeroOriginal (canvas), Terminal (typing loop), MCPInstall (clipboard), WaitlistForm (submit-locked state). |
+| `src/components/*.svelte` | The 4 hydration islands: NavBar, HeroOriginal (canvas), Terminal (typing loop), WaitlistForm (submit-locked state). |
 | `public/` | Static assets (`dstack-logo.svg`). |
 | `astro.config.mjs` | `output: "static"`, `outDir: "./out"` (so `wrangler.jsonc`'s `assets.directory` keeps working unchanged). |
 | `wrangler.jsonc` | Workers-Assets-only config. No `main` script, just `assets.directory: "./out"`. |
@@ -128,9 +128,8 @@ boots after each. Tailwind v4 stays on the same major.
 | `WaitlistForm` | `.svelte` | Form's `submitted` state controls input/button styling and the button's text. |
 | `Terminal` | `.svelte` | Async loop with cancel-on-unmount, dynamic line list, scroll-to-bottom. Hydrates with `client:visible` since the hero is above it. |
 | `HeroOriginal` | `.svelte` | Canvas + `requestAnimationFrame` loop. |
-| `MCPInstall` | `.svelte` | Clipboard write + transient `copied` state. |
 
-If you find yourself adding a 6th Svelte island for a one-class
+If you find yourself adding a 5th Svelte island for a one-class
 toggle, stop and think — vanilla JS in `.astro` is the right answer
 ~80% of the time on this site.
 
